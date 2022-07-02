@@ -149,3 +149,19 @@ resource "aws_security_group_rule" "app_to_db_ingress" {
 output "vpc" {
   value = aws_vpc.vpc
 }
+
+output "alb_subnets" {
+  value = [for subnet in aws_subnet.alb : subnet.id]
+}
+
+output "alb_sg" {
+  value = aws_security_group.alb.id
+}
+
+output "app_subnets" {
+  value = [for subnet in aws_subnet.app : subnet.id]
+}
+
+output "app_sg" {
+  value = aws_security_group.app.id
+}

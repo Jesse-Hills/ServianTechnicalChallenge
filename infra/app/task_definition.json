@@ -1,0 +1,47 @@
+[
+  {
+    "portMappings": [
+      {
+        "hostPort": 80,
+        "protocol": "tcp",
+        "containerPort": 80
+      }
+    ],
+    "command": [
+      "serve"
+    ],
+    "environment": [
+      {
+        "name": "VTT_DBHOST",
+        "value": "${db_host}"
+      },
+      {
+        "name": "VTT_DBNAME",
+        "value": "${db_name}"
+      },
+      {
+        "name": "VTT_DBPASSWORD",
+        "value": "${db_pass}"
+      },
+      {
+        "name": "VTT_DBPORT",
+        "value": "5432"
+      },
+      {
+        "name": "VTT_DBUSER",
+        "value": "${db_user}"
+      },
+      {
+        "name": "VTT_LISTENHOST",
+        "value": "0.0.0.0"
+      },
+      {
+        "name": "VTT_LISTENPORT",
+        "value": "80"
+      }
+    ],
+    "image": "servian/techchallengeapp:latest",
+    "essential": true,
+    "name": "servian-tech-app"
+  }
+]
