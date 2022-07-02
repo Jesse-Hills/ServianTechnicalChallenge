@@ -24,7 +24,6 @@ resource "aws_db_instance" "db" {
 output "config" {
   value = {
     db_host = split(":", aws_db_instance.db.endpoint)[0]
-    db_name = aws_db_instance.db.name
     db_pass = aws_db_instance.db.password
     db_user = aws_db_instance.db.username
   }

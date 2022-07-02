@@ -40,7 +40,7 @@
         "value": "80"
       }
     ],
-    "image": "${image_url}",
+    "image": "${image_uri}",
     "essential": true,
     "name": "servian-tech-app"
   }

@@ -28,7 +28,7 @@ variable "db_config" {
   type        = map(string)
 }
 
-variable "image_url" {
+variable "image_uri" {
   description = "Image URL for container."
   type        = string
 }

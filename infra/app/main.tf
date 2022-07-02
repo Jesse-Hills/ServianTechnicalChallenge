@@ -26,27 +26,85 @@ resource "aws_lb_listener" "app" {
   }
 }
 
+data "aws_iam_policy_document" "execution_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com", "lambda.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "lambda" {
+  statement {
+    sid       = "AllowCreateNetworkInterface"
+    actions   = ["ec2:*"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role" "execution_role" {
+  name                = "servianExecutionRole"
+  assume_role_policy  = data.aws_iam_policy_document.execution_role.json
+  managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
+
+  inline_policy {
+    name   = "LambdaRequiredPermissions"
+    policy = data.aws_iam_policy_document.lambda.json
+  }
+}
+
 resource "aws_ecs_task_definition" "app" {
   family                   = "servian-tech-app"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 256
   memory                   = 1024
+  execution_role_arn       = aws_iam_role.execution_role.arn
 
   container_definitions = templatefile(
     "${path.module}/task_definition.json",
     {
-      db_host = var.db_config.db_host,
-      db_name = var.db_config.db_name,
-      db_pass = var.db_config.db_pass,
-      db_user = var.db_config.db_user,
-      image_url = var.image_url,
+      db_host   = var.db_config.db_host,
+      db_pass   = var.db_config.db_pass,
+      db_user   = var.db_config.db_user,
+      image_uri = var.image_uri,
     }
   )
 
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
+  }
+}
+
+resource "aws_lambda_function" "init_db" {
+  function_name = "servian-init-db"
+  role          = aws_iam_role.execution_role.arn
+  image_uri     = "${var.image_uri}:latest"
+  package_type  = "Image"
+
+  environment {
+    variables = {
+      VTT_DBHOST     = var.db_config.db_host
+      VTT_DBNAME     = "servian_tech_app"
+      VTT_DBPASSWORD = var.db_config.db_pass
+      VTT_DBPORT     = "5432"
+      VTT_DBUSER     = var.db_config.db_user
+      VTT_LISTENHOST = "0.0.0.0"
+      VTT_LISTENPORT = "80"
+    }
+  }
+
+  image_config {
+    command = ["updatedb"]
+  }
+
+  vpc_config {
+    subnet_ids         = var.app_subnets
+    security_group_ids = ["${var.app_sg}"]
   }
 }
 

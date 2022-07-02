@@ -25,7 +25,7 @@ module "app" {
   app_subnets = module.networking.app_subnets
   app_sg      = module.networking.app_sg
   db_config   = module.database.config
-  image_url   = module.ecr.image_url
+  image_uri   = module.ecr.image_uri
 
   depends_on = [module.networking, module.database, module.ecr]
 }
