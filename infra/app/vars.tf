@@ -22,3 +22,13 @@ variable "app_sg" {
   description = "Security group to assign to ECS service."
   type        = string
 }
+
+variable "db_config" {
+  description = "Map containing database configuration."
+  type        = map(string)
+}
+
+variable "image_url" {
+  description = "Image URL for container."
+  type        = string
+}

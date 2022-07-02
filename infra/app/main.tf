@@ -36,10 +36,11 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = templatefile(
     "${path.module}/task_definition.json",
     {
-      db_host = "127.0.0.1",
-      db_name = "servian-tech-app",
-      db_pass = "changeme",
-      db_user = "servian",
+      db_host = var.db_config.db_host,
+      db_name = var.db_config.db_name,
+      db_pass = var.db_config.db_pass,
+      db_user = var.db_config.db_user,
+      image_url = var.image_url,
     }
   )
 

@@ -17,7 +17,7 @@
       },
       {
         "name": "VTT_DBNAME",
-        "value": "${db_name}"
+        "value": "servian_tech_app"
       },
       {
         "name": "VTT_DBPASSWORD",
@@ -40,7 +40,7 @@
         "value": "80"
       }
     ],
-    "image": "servian/techchallengeapp:latest",
+    "image": "${image_url}",
     "essential": true,
     "name": "servian-tech-app"
   }

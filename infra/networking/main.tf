@@ -165,3 +165,11 @@ output "app_subnets" {
 output "app_sg" {
   value = aws_security_group.app.id
 }
+
+output "db_subnets" {
+  value = [for subnet in aws_subnet.db : subnet.id]
+}
+
+output "db_sg" {
+  value = aws_security_group.db.id
+}
