@@ -16,7 +16,7 @@ scripts/bucket.sh
 2. Initialise ECR repo for ECS to use
 ```bash
 cd infra/
-terraform init
+terraform init -reconfigure
 terraform apply -auto-approve -target=module.ecr
 ```
 
@@ -45,5 +45,5 @@ cd ../scripts/
 ```bash
 cd ../infra/
 terraform console
-> module.app.endpoint_url
+module.app.endpoint_url
 ```
