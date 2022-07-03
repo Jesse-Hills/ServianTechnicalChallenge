@@ -1,9 +1,11 @@
+# Setup non-default VPC
 resource "aws_vpc" "vpc" {
   cidr_block           = "192.168.0.0/20"
   enable_dns_support   = true
   enable_dns_hostnames = true
 }
 
+# Setup gateways for egress
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 }
@@ -17,6 +19,7 @@ resource "aws_nat_gateway" "natgw" {
 
 resource "aws_eip" "natgw" {}
 
+# Setup subnets
 resource "aws_subnet" "alb" {
   for_each = local.availability_zones
 
@@ -41,6 +44,7 @@ resource "aws_subnet" "db" {
   availability_zone = "ap-southeast-2${lower(each.key)}"
 }
 
+# Setup route tables for private and public subnets
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
 
@@ -80,6 +84,7 @@ resource "aws_route_table_association" "db" {
   route_table_id = aws_route_table.private.id
 }
 
+# Setup security groups to restrict access
 resource "aws_security_group" "alb" {
   vpc_id = aws_vpc.vpc.id
 }

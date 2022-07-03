@@ -1,3 +1,4 @@
+# Setup ALB resources for App
 resource "aws_lb" "app" {
   security_groups = ["${var.alb_sg}"]
   subnets         = var.alb_subnets
@@ -26,6 +27,7 @@ resource "aws_lb_listener" "app" {
   }
 }
 
+# Setup IAM resources for ECS/Lambda
 data "aws_iam_policy_document" "execution_role" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -56,6 +58,7 @@ resource "aws_iam_role" "execution_role" {
   }
 }
 
+# Setup ECS/Lambda resources
 resource "aws_ecs_task_definition" "app" {
   family                   = "servian-tech-app"
   requires_compatibilities = ["FARGATE"]
@@ -135,6 +138,7 @@ resource "aws_ecs_service" "app" {
   }
 }
 
+# Configure autoscaling for ECS app
 resource "aws_appautoscaling_target" "ecs_target" {
   max_capacity       = 4
   min_capacity       = 1

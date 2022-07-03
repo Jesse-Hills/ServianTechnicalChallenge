@@ -1,3 +1,4 @@
+# Configure private ECR repo
 resource "aws_ecr_repository" "repo" {
   name = "servian-tech-app"
 }

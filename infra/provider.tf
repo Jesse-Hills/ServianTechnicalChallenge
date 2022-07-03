@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket  = "servian-tech-app-1656768184"
+    bucket  = "servian-tech-app-jesse-1656812402"
     key     = "Terraform/State/ServianTechApp"
     region  = "ap-southeast-2"
     encrypt = "true"
@@ -16,4 +16,8 @@ terraform {
       version = "3.3.2"
     }
   }
+}
+
+provider "aws" {
+  region = "ap-southeast-2"
 }

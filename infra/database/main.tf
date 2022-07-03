@@ -1,9 +1,11 @@
+# Configure random password for RDS
 resource "random_password" "db_pass" {
   length           = 32
   special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
+# Setup RDS instance for ECS app to use
 resource "aws_db_subnet_group" "db" {
   subnet_ids = var.db_subnets
 }
